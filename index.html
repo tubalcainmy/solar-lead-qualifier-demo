@@ -1727,7 +1727,7 @@ function updateDemoCTAs() {
 }
 // Run on page load and after any result shows
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(updateDemoCTAs, 100);
+  setTimeout(updateDemoCTAs, 0);
 const observer = new MutationObserver(updateDemoCTAs);
  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 });
