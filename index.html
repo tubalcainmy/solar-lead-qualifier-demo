@@ -1717,16 +1717,10 @@ function showAmberResult(payback, monthly, name) {
     issueList.appendChild(li);
   });
 
-  // DEMO MODE — amber CTA also directs to installer contact
-  const msg = `Hi Mystery, I just went through the Tubalcain Solar ROI qualifier demo (got the amber result path). I am interested in running this system for my city. Can we talk?`;
-  document.getElementById('amberCTA').href = `https://wa.me/2348029234994?text=${encodeURIComponent(msg)}`;
-
-  document.getElementById('resultAmber').classList.add('show');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// DEMO MODE — update CTA button text to be installer-facing
 function updateDemoCTAs() {
+  // 1. Temporarily stop watching for changes
+  if (window.demoObserver) window.demoObserver.disconnect();
+
   const greenCTA = document.getElementById('greenCTA');
   const amberCTA = document.getElementById('amberCTA');
   if (greenCTA) {
@@ -1737,12 +1731,18 @@ function updateDemoCTAs() {
     amberCTA.innerHTML = '💬 Interested in running this for your city? Message Mystery →';
     amberCTA.style.fontSize = '14px';
   }
+
+  // 2. Restart the observer after the changes are done
+  if (window.demoObserver) {
+    window.demoObserver.observe(document.body, { childList: true, subtree: true, attributes: true });
+  }
 }
-// Run on page load and after any result shows
+
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(updateDemoCTAs, 100);
-  const observer = new MutationObserver(updateDemoCTAs);
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+  // Store the observer in a variable so we can access it inside the function
+  window.demoObserver = new MutationObserver(updateDemoCTAs);
+  window.demoObserver.observe(document.body, { childList: true, subtree: true, attributes: true });
 });
 
 </script>
